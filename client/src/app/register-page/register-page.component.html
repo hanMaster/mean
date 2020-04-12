@@ -1,6 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="card">
   <div class="card-content">
-    <span class="card-title">Войти в систему</span>
+    <span class="card-title">Создать аккаунт</span>
     <div class="input-field">
       <input
         id="email"
@@ -16,10 +16,10 @@
         *ngIf="form.get('email').invalid && form.get('email').touched"
       >
         <span *ngIf="form.get('email').errors['required']"
-          >Email не должен быть пустым</span
+        >Email не должен быть пустым</span
         >
         <span *ngIf="form.get('email').errors['email']"
-          >Введите корректный email</span
+        >Введите корректный email</span
         >
       </span>
     </div>
@@ -38,12 +38,12 @@
         *ngIf="form.get('password').invalid && form.get('password').touched"
       >
         <span *ngIf="form.get('password').errors['required']"
-          >Пароль не должен быть пустым</span
+        >Пароль не должен быть пустым</span
         >
         <span *ngIf="form.get('password').errors['minlength']"
-          >Пароль должен быть не короче
+        >Пароль должен быть не короче
           {{
-            form.get('password').errors['minlength']['requiredLength']
+          form.get('password').errors['minlength']['requiredLength']
           }}
           символов. Сейчас
           {{ form.get('password').errors['minlength']['actualLength'] }}.
@@ -57,7 +57,7 @@
       class="modal-action btn waves-effect"
       [disabled]="form.invalid || form.disabled"
     >
-      Войти
+      Создать
     </button>
   </div>
 </form>
