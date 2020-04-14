@@ -54,12 +54,13 @@
       type="button"
       class="modal-action waves-effect waves-black btn-flat"
       (click)="onCancelPressed()"
+      [disabled]="pending"
     >
       Отмена
     </button>
     <button
       class="modal-action btn waves-effect"
-      [disabled]="!orderService.list.length"
+      [disabled]="!orderService.list.length || pending"
       (click)="storeOrder()"
     >
       Подтвердить

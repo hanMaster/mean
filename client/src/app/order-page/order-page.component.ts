@@ -28,9 +28,12 @@ export class OrderPageComponent implements OnInit, AfterViewInit, OnDestroy {
   rSub: Subscription;
   isRoot: boolean;
   modal: MaterialInstance;
+  pending = false;
+  oSub: Subscription;
+
   constructor(
     private router: Router,
-    private orderService: OrderService,
+    public orderService: OrderService,
     private ordersService: OrdersService
   ) {}
 
@@ -49,6 +52,9 @@ export class OrderPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.rSub.unsubscribe();
+    if (this.oSub) {
+      this.oSub.unsubscribe();
+    }
     this.modal.destroy();
   }
 
@@ -65,13 +71,23 @@ export class OrderPageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   storeOrder() {
+    this.pending = true;
     const order: Order = {
-      list: this.orderService.list,
+      list: this.orderService.list.map((item) => {
+        delete item._id;
+        return item;
+      }),
     };
-    this.ordersService.storeOrder(order).subscribe(
-      (response) => MaterialService.toast('Заказ сохранен'),
+    this.oSub = this.ordersService.storeOrder(order).subscribe(
+      (response) => {
+        MaterialService.toast('Заказ сохранен');
+        this.orderService.clear();
+      },
       (error) => MaterialService.toast(error.error.message),
-      () => this.modal.close()
+      () => {
+        this.modal.close();
+        this.pending = false;
+      }
     );
   }
 }
