@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from '../shared/services/categories.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Category } from '../shared/interfaces';
 
 @Component({
@@ -9,10 +9,10 @@ import { Category } from '../shared/interfaces';
   styleUrls: ['./categories-page.component.scss'],
 })
 export class CategoriesPageComponent implements OnInit {
-  categories$ : Observable<Category[]>;
+  categories$: Observable<Category[]>;
   constructor(private categoriesService: CategoriesService) {}
 
   ngOnInit(): void {
-    this.categories$ = this.categoriesService.fetchAll()
+    this.categories$ = this.categoriesService.fetchAll();
   }
 }

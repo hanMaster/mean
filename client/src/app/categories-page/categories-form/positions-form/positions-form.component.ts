@@ -26,7 +26,7 @@ export class PositionsFormComponent
   loading = false;
   modal: MaterialInstance;
   form: FormGroup;
-  positionId: string = '';
+  positionId = '';
 
   @ViewChild('modal') modalRef: ElementRef;
   @Input('categoryId') categoryId: string;
