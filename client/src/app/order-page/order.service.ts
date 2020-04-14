@@ -5,14 +5,20 @@ import { OrderPosition, Position } from '../shared/interfaces';
 export class OrderService {
   public list: OrderPosition[] = [];
   public price = 0;
+
   add(position: Position) {
     this.price += position.quantity * position.cost;
-    this.list.push({
-      _id: position._id,
-      name: position.name,
-      cost: position.cost,
-      quantity: position.quantity,
-    });
+    const idx = this.list.findIndex((pos) => pos._id === position._id);
+    if (idx > -1) {
+      this.list[idx].quantity += position.quantity;
+    } else {
+      this.list.push({
+        _id: position._id,
+        name: position.name,
+        cost: position.cost,
+        quantity: position.quantity,
+      });
+    }
   }
 
   remove(orderPosition: OrderPosition) {
@@ -25,4 +31,5 @@ export class OrderService {
     this.list = [];
     this.price = 0;
   }
+
 }

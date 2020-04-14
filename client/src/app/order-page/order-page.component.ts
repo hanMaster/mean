@@ -13,7 +13,8 @@ import {
   MaterialService,
 } from '../shared/classes/material.service';
 import { OrderService } from './order.service';
-import { OrderPosition } from '../shared/interfaces';
+import { Order, OrderPosition } from '../shared/interfaces';
+import { OrdersService } from '../shared/services/orders.service';
 
 @Component({
   selector: 'app-order-page',
@@ -27,7 +28,11 @@ export class OrderPageComponent implements OnInit, AfterViewInit, OnDestroy {
   rSub: Subscription;
   isRoot: boolean;
   modal: MaterialInstance;
-  constructor(private router: Router, private orderService: OrderService) {}
+  constructor(
+    private router: Router,
+    private orderService: OrderService,
+    private ordersService: OrdersService
+  ) {}
 
   ngOnInit(): void {
     this.isRoot = this.router.url === '/order';
@@ -57,5 +62,16 @@ export class OrderPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   removeOrderItem(orderPosition: OrderPosition) {
     this.orderService.remove(orderPosition);
+  }
+
+  storeOrder() {
+    const order: Order = {
+      list: this.orderService.list,
+    };
+    this.ordersService.storeOrder(order).subscribe(
+      (response) => MaterialService.toast('Заказ сохранен'),
+      (error) => MaterialService.toast(error.error.message),
+      () => this.modal.close()
+    );
   }
 }
