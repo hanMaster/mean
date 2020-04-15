@@ -10,7 +10,7 @@ import {
   MaterialInstance,
   MaterialService,
 } from '../shared/classes/material.service';
-import { Order } from '../shared/interfaces';
+import { Filter, Order } from '../shared/interfaces';
 import { Subscription } from 'rxjs';
 import { OrdersService } from '../shared/services/orders.service';
 
@@ -32,6 +32,7 @@ export class HistoryPageComponent implements OnInit, AfterViewInit, OnDestroy {
   oSub: Subscription;
   loading = false;
   haveMoreOrders = true;
+  filter: Filter = {};
 
   constructor(private ordersService: OrdersService) {}
 
@@ -50,14 +51,15 @@ export class HistoryPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private fetch() {
     this.loading = true;
-    const params = {
+    const params = Object.assign({}, this.filter, {
       offset: this.offset,
       limit: this.limit,
-    };
+    });
+
     this.oSub = this.ordersService.fetch(params).subscribe(
       (orders) => {
         this.orders = this.orders.concat(orders);
-        this.haveMoreOrders = orders.length === STEP
+        this.haveMoreOrders = orders.length === STEP;
       },
       (error) => MaterialService.toast(error.error.message),
       () => (this.loading = false)
@@ -67,5 +69,16 @@ export class HistoryPageComponent implements OnInit, AfterViewInit, OnDestroy {
   loadMore() {
     this.offset += STEP;
     this.fetch();
+  }
+
+  applyFilter(filter: Filter) {
+    this.orders = [];
+    this.offset = 0;
+    this.filter = filter;
+    this.fetch();
+  }
+
+  isFiltered(): boolean {
+    return Object.keys(this.filter).length !== 0;
   }
 }
