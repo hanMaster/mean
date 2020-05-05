@@ -1,12 +1,16 @@
 <ul class="sidenav sidenav-fixed a-sidenav">
-  <h4>Newborn</h4>
+  <li>
+    <h4>Newborn</h4>
+  </li>
 
   <li *ngFor="let link of links" class="bold" routerLinkActive="active">
     <a routerLink="{{ link.url }}">{{ link.name }}</a>
   </li>
 
   <li class="bold last">
-    <a href="#" class="waves-effect waves-orange" (click)="logout($event)">Выйти</a>
+    <a href="#" class="waves-effect waves-orange" (click)="logout($event)"
+      >Выйти</a
+    >
   </li>
 </ul>
 
@@ -33,12 +37,6 @@
   </ul>
 </div>
 
-
-<a id="menu" class="waves-effect waves-light btn btn-floating"><i class="material-icons">info</i></a>
-
-<div class="tap-target" data-target="menu">
-  <div class="tap-target-content">
-    <h5>Зачем нужна эта страница?</h5>
-    <p>Страница “Обзор” покажет динамику продаж за предыдущий день. Сравнение со средним значениями поможет вам понять, как идут дела у Вашего бизнеса.</p>
-  </div>
-</div>
+<a id="menu" class="waves-effect waves-light btn btn-floating"
+  ><i class="material-icons">info</i></a
+>

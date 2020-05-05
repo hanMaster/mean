@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { OverviewPage } from '../interfaces';
+import { AnalyticsPage, OverviewPage } from '../interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,5 +12,7 @@ export class AnalyticsService {
     return this.http.get<OverviewPage>('api/analytics/overview');
   }
 
-  getAnalytics() {}
+  getAnalytics(): Observable<AnalyticsPage> {
+    return this.http.get<AnalyticsPage>('api/analytics/analytics');
+  }
 }
