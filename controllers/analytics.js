@@ -4,7 +4,7 @@ const errorHandler = require('../utils/errorHandler');
 
 module.exports.overview = async (req, res) => {
   try {
-    const allOrders = await Order.find({ user: req.user.id }).sort({date: 1});
+    const allOrders = await Order.find({ user: req.user.id }).sort({ date: 1 });
     const ordersMap = getOrdersMap(allOrders);
     const yesterdayOrders =
       ordersMap[moment().add(-1, 'd').format('DD.MM.YYYY')] || [];
@@ -52,13 +52,13 @@ module.exports.overview = async (req, res) => {
         percent: Math.abs(+gainPercent),
         compare: Math.abs(+compareGain),
         yesterday: +yesterdayGain,
-        isHigher: +gainPercent > 0
+        isHigher: +gainPercent > 0,
       },
       orders: {
         percent: Math.abs(+ordersPercent),
         compare: Math.abs(+compareOrdersNumber),
         yesterday: +yesterdayOrdersNumber,
-        isHigher: +ordersPercent > 0
+        isHigher: +ordersPercent > 0,
       },
     });
   } catch (e) {
@@ -66,8 +66,28 @@ module.exports.overview = async (req, res) => {
   }
 };
 
-module.exports.analytics = (req, res) => {
-  res.status(200).json({ register: 'register from controller' });
+module.exports.analytics = async (req, res) => {
+  try {
+    const allOrders = await Order.find({ user: req.user.id }).sort({ date: 1 });
+    const ordersMap = getOrdersMap(allOrders);
+    const average = +(
+      calculatePrice(allOrders) / Object.keys(ordersMap).length
+    ).toFixed(2);
+    const chart = Object.keys(ordersMap).map((label) => {
+      // label == 05.05.2020
+      const gain = calculatePrice(ordersMap[label]);
+      const order = ordersMap[label].length;
+      return {
+        label,
+        gain,
+        order,
+      };
+    });
+
+    res.status(200).json({ average, chart });
+  } catch (e) {
+    errorHandler(res, e);
+  }
 };
 
 function getOrdersMap(orders = []) {
